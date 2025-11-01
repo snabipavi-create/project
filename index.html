@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Auth - Step by Step</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 { margin-bottom: 20px; color: #333; }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 95%;
+      padding: 10px;
+      background-color: #4a68d0;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover { background-color: #3b57b0; }
+
+    .link {
+      margin-top: 10px;
+      display: block;
+      color: #4a68d0;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .page { display: none; }
+    .active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Register Page -->
+    <div id="registerPage" class="page active">
+      <h2>Register</h2>
+      <input type="text" id="regEmail" placeholder="Email">
+      <input type="password" id="regPassword" placeholder="Password">
+      <button onclick="registerUser()">Register</button>
+      <span class="link" onclick="showPage('loginPage')">Already have an account? Login</span>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="page">
+      <h2>Login</h2>
+      <input type="text" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button onclick="loginUser()">Login</button>
+      <span class="link" onclick="showPage('registerPage')">Don't have an account? Register</span>
+    </div>
+
+    <!-- Home Page -->
+    <div id="homePage" class="page">
+      <h2>Welcome Home!</h2>
+      <p id="welcomeMsg"></p>
+      <button onclick="logoutUser()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    function registerUser() {
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      if (email && password) {
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userPassword', password);
+        alert('Registration successful!');
+        showPage('loginPage');
+      } else {
+        alert('Please fill in all fields!');
+      }
+    }
+
+    function loginUser() {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      const storedEmail = localStorage.getItem('userEmail');
+      const storedPassword = localStorage.getItem('userPassword');
+
+      if (email === storedEmail && password === storedPassword) {
+        document.getElementById('welcomeMsg').innerText = 'Hello, ' + email;
+        showPage('homePage');
+      } else {
+        alert('Invalid login credentials!');
+      }
+    }
+
+    function logoutUser() {
+      showPage('loginPage');
+    }
+  </script>
+
+</body>
+</html>
